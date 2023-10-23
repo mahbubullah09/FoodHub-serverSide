@@ -47,9 +47,35 @@ app.get('/products/:id', async(req,res)=>{
 
     
     const result = await productsCollection.findOne(query);
+
+    res.send(result);
+})
+
+//update
+
+app.put('/products/:id', async(req,res)=>{
+    const id = req.params.id;
+    const filter ={_id : new ObjectId(id)}
+    const options = {upsert: true};
+    const updatedProduct= req.body;
+    const product ={
+        $set: {
+            image: updatedProduct.image, 
+            product: updatedProduct.product, 
+            brand_name: updatedProduct.brand_name, 
+            category: updatedProduct.category, 
+            rating: updatedProduct.rating, 
+            price: updatedProduct.price, 
+            description: updatedProduct.description
+        }
+    }
+
+    const result = await productsCollection.updateOne(filter, product)
     
     res.send(result);
 })
+
+
 
 
 
